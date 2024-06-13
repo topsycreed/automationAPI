@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id "com.google.protobuf" version "0.9.4"
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group = 'com.productStar'
@@ -22,6 +23,7 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured:5.4.0'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
     testImplementation 'org.assertj:assertj-core:3.26.0'
+    implementation 'io.qameta.allure:allure-rest-assured:2.27.0'
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -68,4 +70,12 @@ clean {
 
 test {
     useJUnitPlatform()
+    systemProperties(System.getProperties())
+}
+
+tasks.register('smokeTest', Test) {
+    useJUnitPlatform() {
+        includeTags 'smoke', 'api'
+    }
+    systemProperties(System.getProperties())
 }

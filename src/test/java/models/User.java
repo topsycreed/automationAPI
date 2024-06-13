@@ -1,4 +1,4 @@
-package com.productStar.models;
+package models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

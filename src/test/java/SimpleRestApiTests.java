@@ -1,6 +1,6 @@
-import com.productStar.models.User;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
+import models.User;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
