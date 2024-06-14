@@ -37,7 +37,7 @@ class SimpleRestApiTests {
                   "userStatus": 0
                 }
                 """;
-        String url = "https://petstore.swagger.io/v2/user";
+        String url = BASE_URL + "user";
 
         ValidatableResponse response =
                 given().
@@ -219,20 +219,20 @@ class SimpleRestApiTests {
                 response();
         User actualUser = getResponse.as(User.class);
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(actualUser.getUsername().equals(user.getUsername()));
-        softly.assertThat(actualUser.getFirstName().equals(user.getFirstName()));
-        softly.assertThat(actualUser.getLastName().equals(user.getLastName()));
-        softly.assertThat(actualUser.getEmail().equals(user.getEmail()));
-        softly.assertThat(actualUser.getPassword().equals(user.getPassword()));
-        softly.assertThat(actualUser.getPhone().equals(user.getPhone()));
-        softly.assertThat(actualUser.getUserStatus() == (user.getUserStatus()));
+        softly.assertThat(actualUser.getUsername()).isEqualTo(user.getUsername());
+        softly.assertThat(actualUser.getFirstName()).isEqualTo(user.getFirstName());
+        softly.assertThat(actualUser.getLastName()).isEqualTo(user.getLastName());
+        softly.assertThat(actualUser.getEmail()).isEqualTo(user.getEmail());
+        softly.assertThat(actualUser.getPassword()).as("getPassword is wrong").isEqualTo(user.getPassword());
+        softly.assertThat(actualUser.getPhone()).as("getPhone is wrong").isEqualTo(user.getPhone());
+        softly.assertThat(actualUser.getUserStatus()).isEqualTo(user.getUserStatus());
         softly.assertAll();
     }
 
     @Test
     void getComplexResponseWithQueryParamTest() {
         String endpoint = "https://petstore.swagger.io/v2/pet/findByStatus";
-        given().
+        Response response = given().
                 header("accept", "application/json").
                 queryParam("status", "available").
                 when().
@@ -243,6 +243,7 @@ class SimpleRestApiTests {
                 header("content-type", equalTo("application/json")).
                 body("id", everyItem(notNullValue())).
                 body("status", everyItem(equalTo("available"))).
-                body("size()", greaterThan(2));
+                body("size()", greaterThan(2)).extract().response();
+        response.getBody().prettyPrint();
     }
 }
